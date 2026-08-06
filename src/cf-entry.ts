@@ -1,5 +1,8 @@
 // Cloudflare Worker 入口
-
+// 放行 SSL 证书验证请求
+if (url.pathname.startsWith('/.well-known/')) {
+  return new Response('OK', { status: 200 });
+}
 import { createApp } from './routes';
 import { KVStorage } from './storage/kv';
 import { runAggregation } from './aggregator';
