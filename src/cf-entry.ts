@@ -1,9 +1,23 @@
 // Cloudflare Worker 入口
 // 放行 SSL 证书验证请求
-const url = new URL(request.url);
-if (url.pathname.startsWith('/.well-known/')) {
-  return new Response('OK', { status: 200 });
+// ✅ 正确：在请求处理函数内部使用 return
+async function handleRequest(request: Request): Promise<Response> {
+    // 1. 首先处理 SSL 证书验证请求
+    const url = new URL(request.url);
+    if (url.pathname.startsWith('/.well-known/')) {
+        // 直接返回 200 响应，让验证通过
+        return new Response('OK', { status: 200 });
+    }
+
+    // 2. 以下是项目原有的业务逻辑
+    // ... (原有代码)
 }
+
+export default {
+    fetch(request: Request) {
+        return handleRequest(request);
+    }
+};
 import { createApp } from './routes';
 import { KVStorage } from './storage/kv';
 import { runAggregation } from './aggregator';
