@@ -1,5 +1,6 @@
 // Cloudflare Worker 入口
 // 放行 SSL 证书验证请求
+const url = new URL(request.url);
 if (url.pathname.startsWith('/.well-known/')) {
   return new Response('OK', { status: 200 });
 }
